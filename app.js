@@ -32,9 +32,9 @@ app.post("/create", async (req, res) => {
 });
 
 // Read data
-app.get("/read/:path", async (req, res) => {
+app.get("/read/*", async (req, res) => {
   try {
-    const { path } = req.params;
+    const path  = req.params[0];
     const snapshot = await db.ref(path).once("value");
     if (!snapshot.exists()) {
       return res.status(404).send({ message: "Data not found" });
@@ -57,9 +57,9 @@ app.put("/update", async (req, res) => {
 });
 
 // Delete data
-app.delete("/delete/:path", async (req, res) => {
+app.delete("/delete/*", async (req, res) => {
   try {
-    const { path } = req.params;
+    const path = req.params[0];
     await db.ref(path).remove();
     res.status(200).send({ message: "Data deleted successfully" });
   } catch (error) {
